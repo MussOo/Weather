@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Application Météo en Next.js
 
-## Getting Started
+![image](https://github.com/user-attachments/assets/8eba65d7-5165-4694-8721-ed100c341be0)
 
-First, run the development server:
+Ce projet est une **application météo** développée avec **Next.js** pour le framework frontend et **Tailwind CSS** pour le style. Elle permet de rechercher la météo dans diverses villes du monde en utilisant plusieurs **API externes** pour récupérer les données nécessaires, comme les coordonnées des villes, les prévisions météo et les informations sur les pays et villes.
+
+## Fonctionnalités
+
+- **Recherche de la météo par ville** : Permet de saisir le nom d'une ville et d'obtenir des informations météorologiques précises pour cette ville.
+![image](https://github.com/user-attachments/assets/272433c6-1bcb-4c1e-a7c7-84bce542c396)
+![image](https://github.com/user-attachments/assets/010b288e-f223-4411-b50a-a63894f7e51e)
+![image](https://github.com/user-attachments/assets/219996b1-e62d-4bf1-8954-53f05b2e594d)
+
+- **Prédictions météo** : Affiche les conditions météo actuelles ainsi que les prévisions pour la ville sélectionnée.
+![image](https://github.com/user-attachments/assets/8bbe29ce-f1b0-4ec0-a947-d16bce8ec049)
+![image](https://github.com/user-attachments/assets/f22ac2cc-a4ba-45b3-a67e-abee29039acc)
+
+- **Liste des pays et des villes** : Propose une liste dynamique des pays et des villes à sélectionner, facilitant la navigation pour l'utilisateur.
+
+## APIs Utilisées
+
+- [**OpenWeather**](https://openweathermap.org/) : Pour récupérer les **coordonnées géographiques** (latitude et longitude) des villes.
+- [**Tomorrow.io**](https://www.tomorrow.io/) : Pour obtenir les **données météorologiques détaillées** (température, humidité, précipitations, etc.) à partir des coordonnées géographiques.
+- **API First.org** : Fournit une **liste des pays** afin de permettre à l'utilisateur de choisir un pays spécifique.
+- [**CountriesNow.space**](https://countriesnow.space/) : Pour obtenir la **liste des villes** associées à chaque pays, utilisée dans l'interface pour la recherche par ville.
+
+## Technologies utilisées
+
+- **Next.js** : Framework React pour le rendu côté serveur (SSR) et la génération de sites statiques (SSG).
+- **Tailwind CSS** : Utilisé pour le design rapide et réactif de l'interface utilisateur.
+- **APIs externes** : Pour l'intégration des données en temps réel et la gestion des informations météorologiques et géographiques.
+
+## Installation
+
+Pour exécuter ce projet en local, suivez les étapes ci-dessous :
+
+1. Clonez le dépôt :
+    
+    ```
+    git clone https://github.com/MussOo/Weather.git
+    ```
+    
+2. Accédez au répertoire du projet :
+
+```bash
+cd Weather
+```
+
+1. Installez les dépendances :
+
+```bash
+npm install
+```
+
+1. Créez un fichier `.env.local` à la racine du projet avec vos clés d'API :
+
+```bash
+NEXT_PUBLIC_OPENWEATHER_API_KEY=VotreCléAPI
+NEXT_PUBLIC_TOMORROW_IO_API_KEY=VotreCléAPI
+```
+
+1. Lancez l'application :
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Accédez à l'application dans votre navigateur à l'adresse suivante :
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Utilisation
 
-## Learn More
+1. Sélectionnez un **pays** dans le menu déroulant.
+2. Sélectionnez ensuite une **ville** disponible dans la liste des villes du pays sélectionné.
+3. L'application affichera la météo actuelle et les prévisions pour la ville choisie.
 
-To learn more about Next.js, take a look at the following resources:
+## Améliorations futures
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Voici quelques améliorations potentielles à apporter au projet :
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Intégration d'un **système de géolocalisation** pour détecter automatiquement la position de l'utilisateur.
+- **Sauvegarde des villes favorites** pour un accès rapide aux informations météorologiques.
+- Ajout d'une **gestion multilingue** pour rendre l'application accessible à un plus large public.
 
-## Deploy on Vercel
+## Contributions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Les contributions sont bienvenues ! Si vous avez des suggestions, des corrections ou des améliorations, n'hésitez pas à soumettre une **pull request**.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Licence
+
+Ce projet est sous licence MIT. Pour plus de détails, consultez le fichier LICENSE.
