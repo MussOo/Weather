@@ -1,101 +1,107 @@
+'use client';
+import { getCountries } from "@/api/country";
+import ListCity from "@/components/listCity";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { isNull } from "util";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [countries, setCountries] = useState([]);
+  const [search, setSearch] = useState("");
+  const [btn_search, setBtn_search] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true); // État pour contrôler l'affichage de la div
+  const [isHidden, setIsHidden] = useState(false); // État pour contrôler la classe hidden
+  const [countryselected, setCountryselected] = useState(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    getCountries(search).then((data) => {
+      if(data.status === "OK"){
+        const obj = data.data;
+        const transformedArray = Object.entries(obj).map(([key, value]) => {
+          return {
+            ...value, // Copier toutes les propriétés de l'objet d'origine
+            code: key   // Ajouter la clé comme nouvelle propriété "code"
+          };
+        });
+        setCountries(transformedArray);
+      }
+    });
+  }, [btn_search, countryselected]);
+
+
+  const toggleHeight = () => {
+    if (isExpanded) {
+      // Si l'élément est actuellement agrandi
+      setIsExpanded(false); // Réduit l'élément
+      setTimeout(() => setIsHidden(true), 651); // Masque l'élément après l'animation
+    } else {
+      // Si l'élément est caché
+      setIsHidden(false); // Rendre l'élément visible
+      setIsExpanded(true); // Agrandit l'élément
+    }
+  };
+
+  return (
+    <div className=" bg-[#0D3B66] w-full h-screen flex flex-col items-center my-auto mx-auto">
+      <h1 className="text-6xl text-white font-bold h-56 flex items-center">
+        MÉTÉO
+      </h1>
+      <div className=" w-[1047px] rounded-lg flex flex-col items-center justify-center gap-20">
+        <div className="w-[1047px] h-[100px] flex flex-row items-center justify-between">
+        <input type="text"
+         placeholder="PAYS"
+         className="w-[950px] h-[50px] rounded-lg bg-white text-black text-xl px-6
+         flex items-center justify-center font-bold uppercase"
+          onChange={(e) => setSearch(e.target.value)}
+          />
+          <button
+            className="w-[80px] h-[50px] bg-white rounded-lg flex items-center justify-center cursor-pointer hover:scale-95 transition ease-in-out delay-100"
+            onClick={() => setBtn_search(!btn_search)}
           >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <img src="https://img.icons8.com/?size=100&id=7695&format=png&color=000000"
+              className="w-10"
+              alt="" />
+          </button>
+
+        </div> 
+        <div className={"bg-white w-full px-[70px] py-[40px] rounded-lg flex flex-row flex-wrap  gap-28 overflow-y-auto transition-all ease-in-out duration-500 delay-150 " + (
+          isExpanded ? "h-[360px]" : "h-0 px-[0px] py-[0px] overflow-hidden" // Si l'élément est agrandi, affiche-le, sinon cache-le
+          + (isHidden ? " hidden" : "") // Si l'élément est caché, cache-le, sinon affiche-le
+
+        )}>
+          {
+            countries && !countryselected && countries.map((country, k) => (
+              <div 
+              key={k} 
+              className="bg-[#011627] w-[225px] h-[50px] text-white flex flex-row items-center justify-start gap-4 py-3 px-6 rounded-xl  cursor-pointer hover:scale-95 transition ease-in-out delay-100"
+              onClick={() => {
+                setCountryselected(country);
+                toggleHeight();
+              }}
+              >
+                <img src={`https://countryflagsapi.netlify.app/flag/${country.code}.svg`} 
+                className="w-10"
+                />
+                <span className="text-xl font-bold">{country.country}</span>
+            </div>
+            )) 
+            || (
+              <div className="w-full h-full flex items-center justify-center">
+                <span className="text-xl font-bold text-white">Aucun pays trouvé</span>
+              </div>
+            )
+            
+          }
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          {
+            countryselected && (
+              <ListCity country={countryselected} setCountryselected={() => {
+                setCountryselected(null)
+                toggleHeight()
+              }}/>
+            )
+          }
+      </div>
     </div>
   );
 }
